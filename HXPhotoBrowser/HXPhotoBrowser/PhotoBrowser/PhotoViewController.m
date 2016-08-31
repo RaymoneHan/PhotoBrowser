@@ -18,7 +18,7 @@
 @interface PhotoViewController ()<UIScrollViewDelegate>
 @property (nonatomic,copy) NSString *imageStr;
 @property (nonatomic,strong) UIImage *placeHolder;
-@property (nonatomic,assign) BOOL isBig;
+@property (nonatomic,assign) BOOL isLoaded;
 @property (nonatomic,strong) UIScrollView *backScroller;
 @property (nonatomic, strong) ProgressCircle *progressCircle;
 
@@ -59,7 +59,7 @@
 #pragma mark - PrivateMethods
 
 -(void)prepareUI{
-    
+    self.isLoaded = NO;
     self.backScroller = [[ UIScrollView alloc]initWithFrame:self.view.bounds];
     [self.view addSubview:self.backScroller];
     self.backScroller.delegate = self;
@@ -86,6 +86,7 @@
     } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         [self.progressCircle removeFromSuperview];
         [self adjustFrames];
+        self.isLoaded = YES;
     }];
 }
 
@@ -164,7 +165,9 @@
 }
 
 - (void)doubleTap:(UIGestureRecognizer *)recognizer{
-    self.isBig = !self.isBig;
+    if (!self.isLoaded) {
+        return;
+    }
     CGPoint touchPoint = [recognizer locationInView:self.view];
     if (self.backScroller.zoomScale <= 1.0) {
         
