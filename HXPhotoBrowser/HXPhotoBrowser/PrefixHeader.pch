@@ -1,0 +1,14 @@
+//
+//  PrefixHeader.pch
+//  HXPhotoBrowser
+//
+//  Created by hanx on 16/8/29.
+//  Copyright © 2016年 hanx. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+#import "UIImageView+WebCache.h"
+
+#endif /* PrefixHeader_pch */
