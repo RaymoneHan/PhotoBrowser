@@ -36,14 +36,12 @@
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
     
     _isPresenting = YES;
-    
     return self;
 }
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
     
     _isPresenting = NO;
-    
     return self;
 }
 
@@ -60,7 +58,6 @@
 - (void)presentTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
     
     UIView *containerView = [transitionContext containerView];
-    
     UIImageView *dummyIV = [self dummyImageView];
     UIImageView *parentIV = [self parentImageView];
     dummyIV.frame = [containerView convertRect:parentIV.frame fromView:parentIV.superview];
