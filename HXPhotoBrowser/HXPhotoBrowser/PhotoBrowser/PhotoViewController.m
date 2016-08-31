@@ -65,6 +65,7 @@
     self.backScroller.delegate = self;
     self.imageView = [[UIImageView alloc]initWithFrame:self.view.bounds];
     [self.imageView setBackgroundColor:[UIColor lightGrayColor]];
+    self.imageView.image = self.placeHolder;
     [self.backScroller addSubview:self.imageView];
     self.imageView.userInteractionEnabled = YES;
     self.imageView.contentMode = UIViewContentModeScaleAspectFit;
