@@ -14,8 +14,10 @@
 
 #import "PhotoViewController.h"
 #import "ProgressCircle.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+#import <Photos/Photos.h>
 
-@interface PhotoViewController ()<UIScrollViewDelegate>
+@interface PhotoViewController ()<UIScrollViewDelegate,UIActionSheetDelegate,UIAlertViewDelegate>
 @property (nonatomic,copy) NSString *imageStr;
 @property (nonatomic,strong) UIImage *placeHolder;
 @property (nonatomic,assign) BOOL isLoaded;
@@ -78,6 +80,10 @@
     [self.view addGestureRecognizer:doubleTap];
     [self adjustFrames];
     [self.view addSubview:self.progressCircle];
+    
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPress:)];
+    
+    [self.view addGestureRecognizer:longPress];
 }
 
 -(void)loadImage{
@@ -153,6 +159,43 @@
     return _progressCircle;
 }
 
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
+    NSString *message = (error == nil) ? @"保存成功" : @"保存失败";
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:message delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:nil,nil];
+    [alert show];
+}
+
+- (void)saveImage {
+    NSString *key = self.imageStr;
+    UIImage *image = [[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:key];
+    UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+    
+}
+
+- (void)showTipsView {
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"无法保存" message:@"请到“设置”－“隐私”－“照片”选项中允许本应用访问您的照片" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"立即前往",nil];
+    [alert show];
+}
+
+
+
+-(BOOL)isAuthor{
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0 ) {
+        PHAuthorizationStatus author = [PHPhotoLibrary authorizationStatus ];
+        if (author == PHAuthorizationStatusRestricted || author == PHAuthorizationStatusDenied){
+            return NO;
+        }
+    } else {
+        ALAuthorizationStatus author = [ALAssetsLibrary authorizationStatus ];
+        if (author == ALAuthorizationStatusRestricted || author ==ALAuthorizationStatusDenied){
+            return NO;
+        }
+    }
+    return YES;
+}
+
+
 #pragma mark - Actions
 
 -(void)tapImage:(UITapGestureRecognizer *)recognizer{
@@ -181,6 +224,48 @@
     
 }
 
+- (void)longPress:(UIGestureRecognizer *)recognizer{
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        NSString *key = self.imageStr;
+        UIImage *image = [[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:key];
+        
+        if (image != nil){
+            UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"保存图片", nil];
+            [actionSheet showInView:self.view];
+        }
+    }
+}
+
+#pragma mark -AlertDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 1) {
+        NSURL *url = [NSURL URLWithString:[[UIDevice currentDevice].systemVersion floatValue] >= 8.0 ? UIApplicationOpenSettingsURLString : @"prefs:root=photos"];
+        [[UIApplication sharedApplication] openURL:url];
+    }
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 0) {
+        if ([self isAuthor]) {
+            [self saveImage];
+        }else{
+            if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
+                __weak typeof(self)weakSelf = self;
+                [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+                    if (status == PHAuthorizationStatusAuthorized) {
+                        [weakSelf saveImage];
+                    } else {
+                        [weakSelf showTipsView];
+                    }
+                }];
+            } else {
+                [self showTipsView];
+            }
+        }
+        
+    }
+}
 
 #pragma mark UIScrollViewDelegate
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
