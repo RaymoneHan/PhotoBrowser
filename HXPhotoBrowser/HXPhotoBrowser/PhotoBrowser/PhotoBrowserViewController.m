@@ -106,7 +106,7 @@
                                                              NSShadowAttributeName:shadow}];
     [attributeText appendAttributedString:[[NSAttributedString alloc]
                                            initWithString:[NSString stringWithFormat:@" / %zd", _photos.urls.count]
-                                           attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:12],
+                                           attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:16],
                                                         NSForegroundColorAttributeName:[UIColor whiteColor],NSShadowAttributeName:shadow}]];
     [self.pageCountButton setAttributedTitle:attributeText forState:UIControlStateNormal];
 }
@@ -127,10 +127,10 @@
 #pragma mark - LazyLoad
 
 -(UIButton *)pageCountButton{
-    CGFloat ScreenHeight = [UIScreen mainScreen].bounds.size.height;
     CGFloat ScreenWidth = [UIScreen mainScreen].bounds.size.width;
     if (!_pageCountButton) {
-        _pageCountButton = [[UIButton alloc]initWithFrame:CGRectMake(0, ScreenHeight - 50, ScreenWidth, 50)];
+        _pageCountButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, ScreenWidth, 50)];
+//        _pageCountButton.backgroundColor = [UIColor colorWithWhite:0 alpha:0.01];
         _pageCountButton.backgroundColor = [UIColor clearColor];
         [self setPageButtonIndex:_photos.selectedIndex];
         [self.view addSubview:_pageCountButton];
