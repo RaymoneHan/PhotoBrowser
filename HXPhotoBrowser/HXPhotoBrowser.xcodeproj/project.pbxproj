@@ -269,6 +269,7 @@
 				TargetAttributes = {
 					B896EB5E1D740832002C44E8 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = G4UV2MS3Z6;
 					};
 					B896EB771D740832002C44E8 = {
 						CreatedOnToolsVersion = 7.3;
@@ -285,6 +286,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -531,11 +533,12 @@
 			baseConfigurationReference = CDD8F813050AD4DF410D4398 /* Pods-HXPhotoBrowser.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = G4UV2MS3Z6;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/HXPhotoBrowser/PrefixHeader.pch";
 				INFOPLIST_FILE = HXPhotoBrowser/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.kingnet.HXPhotoBrowser;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kekeyuyin.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -545,11 +548,12 @@
 			baseConfigurationReference = 64138D59E28FC4CAB7B9F5A3 /* Pods-HXPhotoBrowser.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = G4UV2MS3Z6;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/HXPhotoBrowser/PrefixHeader.pch";
 				INFOPLIST_FILE = HXPhotoBrowser/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.kingnet.HXPhotoBrowser;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kekeyuyin.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

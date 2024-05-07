@@ -162,8 +162,14 @@
 
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
     NSString *message = (error == nil) ? @"保存成功" : @"保存失败";
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:message delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:nil,nil];
-    [alert show];
+//    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:message delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:nil,nil];
+//    [alert show];
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *btn = [UIAlertAction actionWithTitle:@"我知道了" style:UIAlertActionStyleDefault handler: nil];
+    [alert addAction:btn];
+    [self presentViewController:alert animated:true completion:nil];
+    
 }
 
 - (void)saveImage {
@@ -174,23 +180,23 @@
 }
 
 - (void)showTipsView {
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"无法保存" message:@"请到“设置”－“隐私”－“照片”选项中允许本应用访问您的照片" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"立即前往",nil];
-    [alert show];
+//    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"无法保存" message:@"请到“设置”－“隐私”－“照片”选项中允许本应用访问您的照片" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:@"立即前往",nil];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"无法保存" message:@"请到“设置”－“隐私”－“照片”选项中允许本应用访问您的照片" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *btn = [UIAlertAction actionWithTitle:@"我知道了" style:UIAlertActionStyleDefault handler: nil];
+    [alert addAction:btn];
+    
+    UIAlertAction *go = [UIAlertAction actionWithTitle:@"立即前往" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSURL *url = [NSURL URLWithString:[[UIDevice currentDevice].systemVersion floatValue] >= 8.0 ? UIApplicationOpenSettingsURLString : @"prefs:root=photos"];
+        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+    }];
+    [alert addAction:go];
+    [self presentViewController:alert animated:true completion:nil];
 }
 
-
-
 -(BOOL)isAuthor{
-    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0 ) {
-        PHAuthorizationStatus author = [PHPhotoLibrary authorizationStatus ];
-        if (author == PHAuthorizationStatusRestricted || author == PHAuthorizationStatusDenied){
-            return NO;
-        }
-    } else {
-        ALAuthorizationStatus author = [ALAssetsLibrary authorizationStatus ];
-        if (author == ALAuthorizationStatusRestricted || author ==ALAuthorizationStatusDenied){
-            return NO;
-        }
+    PHAuthorizationStatus author = [PHPhotoLibrary authorizationStatus ];
+    if (author == PHAuthorizationStatusRestricted || author == PHAuthorizationStatusDenied){
+        return NO;
     }
     return YES;
 }
@@ -230,40 +236,36 @@
         UIImage *image = [[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:key];
         
         if (image != nil){
-            UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"保存图片", nil];
-            [actionSheet showInView:self.view];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"无法保存" message:@"请到“设置”－“隐私”－“照片”选项中允许本应用访问您的照片" preferredStyle:UIAlertControllerStyleActionSheet];
+            UIAlertAction *btn = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler: nil];
+            [alert addAction:btn];
+            
+            UIAlertAction *go = [UIAlertAction actionWithTitle:@"保存图片" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self saveImageAction];
+            }];
+            [alert addAction:go];
+            [self presentViewController:alert animated:true completion:nil];
+            
         }
     }
 }
 
-#pragma mark -AlertDelegate
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == 1) {
-        NSURL *url = [NSURL URLWithString:[[UIDevice currentDevice].systemVersion floatValue] >= 8.0 ? UIApplicationOpenSettingsURLString : @"prefs:root=photos"];
-        [[UIApplication sharedApplication] openURL:url];
-    }
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == 0) {
-        if ([self isAuthor]) {
-            [self saveImage];
-        }else{
-            if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
-                __weak typeof(self)weakSelf = self;
-                [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-                    if (status == PHAuthorizationStatusAuthorized) {
-                        [weakSelf saveImage];
-                    } else {
-                        [weakSelf showTipsView];
-                    }
-                }];
-            } else {
-                [self showTipsView];
-            }
+- (void)saveImageAction {
+    if ([self isAuthor]) {
+        [self saveImage];
+    }else{
+        if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
+            __weak typeof(self)weakSelf = self;
+            [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+                if (status == PHAuthorizationStatusAuthorized) {
+                    [weakSelf saveImage];
+                } else {
+                    [weakSelf showTipsView];
+                }
+            }];
+        } else {
+            [self showTipsView];
         }
-        
     }
 }
 
