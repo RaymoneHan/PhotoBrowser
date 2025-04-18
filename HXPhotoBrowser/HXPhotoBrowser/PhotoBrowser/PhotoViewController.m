@@ -7,7 +7,7 @@
 //
 #define kIsFullWidthForLandScape YES
 //图片缩放比例
-#define kMinZoomScale 0.6f
+#define kMinZoomScale 0.5f
 #define kMaxZoomScale 2.0f
 #define ScreenWidth [UIScreen mainScreen].bounds.size.width
 #define ScreenHeight [UIScreen mainScreen].bounds.size.height

@@ -75,15 +75,15 @@
 }
 
 -(NSArray *)arrayImageUrlStr{
-    if (!_arrayImageUrlStr) {//_1107-602
-        _arrayImageUrlStr = @[@"http://www.sinaimg.cn/dy/slidenews/4_img/2016_35/704_2002418_397006.gif",
-                              @"http://pic.sjjiasu.com/upload/20160818/14/57b5551b00094.jpg",
-                              @"http://pic.sjjiasu.com/upload/20160818/14/57b554f489a29.jpg",
-                              @"http://pic.sjjiasu.com/upload/20160818/14/57b55544c4e10.jpg",
-                              @"http://pic.sjjiasu.com/upload/20160818/14/57b551ba98c01.jpg",
-                              @"http://pic.sjjiasu.com/upload/20160818/13/57b54b1d52086.jpg",
-                              @"http://pic.sjjiasu.com/upload/20160818/14/57b55352b58ea.jpg",
-                              @"http://img5.duitang.com/uploads/item/201503/14/20150314134158_exzJM.thumb.224_0.jpeg"];
+    if (!_arrayImageUrlStr) {
+        _arrayImageUrlStr = @[@"https://cdn.kekeyuyin.com/test/album/62b6fc7abbc37b6e61919f81a2f83388.png",
+                              @"https://cdn.kekeyuyin.com/15291719991745_.pic.jpg",
+                              @"https://cdn.kekeyuyin.com/test/album/0c1e7d01db80e4e5c6b1850d334792a6.png",
+                              @"https://cdn.kekeyuyin.com/test/album/12bc983025e41c626b7ff71c7502b91d.png",
+                              @"https://cdn.kekeyuyin.com/test/album/36f37ea1c58550de6b2e35ba1c965baf.png",
+                              @"https://cdn.kekeyuyin.com/test/album/4006cf3f147d98dae45062b21380342e.png",
+                              @"https://cdn.kekeyuyin.com/test/album/52e52bb051e6806ca159ada0341bc309.png",
+                              @"https://cdn.kekeyuyin.com/test/album/576ce7a36c4a83f346ffb6e83a1ae40c.png"];
     }
     return _arrayImageUrlStr;
 }
